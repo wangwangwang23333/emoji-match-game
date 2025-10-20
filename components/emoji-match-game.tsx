@@ -20,7 +20,8 @@ import {
   Trophy,
 } from "lucide-react"
 
-type FriendEmoji = "🌟" | "🎈" | "🍎" | "🐱" | "🔵" | "🍐" | "🐶" | "🟢" | "🍊"
+// Allow any emoji string for flexibility — avoids hardcoding a union of many emoji
+type FriendEmoji = string
 
 interface Friend {
   emoji: FriendEmoji
