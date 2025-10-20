@@ -495,7 +495,7 @@ export default function EmojiMatchGame() {
 
             <div className="mt-6 p-4 bg-muted/50 rounded-lg">
               <p className="text-sm text-muted-foreground text-center">
-                集齐全部图鉴，解锁神秘惊喜 · 点击已解锁的卡片查看详情
+                集齐全部图鉴，回忆那些背后的故事吧 · 点击已解锁的卡片查看详情
               </p>
             </div>
           </Card>
