@@ -41,15 +41,15 @@ interface GameCard {
 }
 
 const FRIENDS: Friend[] = [
+  { emoji: "🐱", name: "郭蓥蓥", nickname: "莹莹莹", description: "幽默风趣的损友", letter: "R" },
   { emoji: "🤣", name: "汪明杰", nickname: "追逐", description: "爱打游戏的挚友", letter: "S" },
   { emoji: "🏃", name: "梁乔", nickname: "Joe", description: "热爱运动的伙伴", letter: "T" },
-  { emoji: "🤡", name: "方必诚", nickname: "暴克尔", description: "温柔善良的闺蜜", letter: "A" },
-  { emoji: "🐱", name: "郭蓥蓥", nickname: "莹莹莹", description: "幽默风趣的损友", letter: "R" },
-  { emoji: "😋", name: "香宁雨", nickname: "禾川", description: "才华横溢的学霸", letter: "P" },
-  { emoji: "☁️", name: "赵敏", nickname: "浓云", description: "热心肠的好兄弟", letter: "A" },
-  { emoji: "💿", name: "陈垲昕", nickname: "一壤", description: "活泼开朗的开心果", letter: "R" },
-  { emoji: "🏊", name: "程敬", nickname: "Hypocrisy", description: "文艺范的知己", letter: "T" },
   { emoji: "😅", name: "尚丙奇", nickname: "Bingqi", description: "充满正能量的朋友", letter: "Y" },
+  { emoji: "💿", name: "陈垲昕", nickname: "一壤", description: "活泼开朗的开心果", letter: "R" },
+  { emoji: "😋", name: "香宁雨", nickname: "禾川", description: "才华横溢的学霸", letter: "P" },
+  { emoji: "🏊", name: "程敬", nickname: "Hypocrisy", description: "文艺范的知己", letter: "T" },
+  { emoji: "☁️", name: "赵敏", nickname: "浓云", description: "热心肠的好兄弟", letter: "A" },
+  { emoji: "🤡", name: "方必诚", nickname: "暴克尔", description: "温柔善良的闺蜜", letter: "A" },
 ]
 
 const MORSE_CODE: Record<string, string> = {
@@ -593,7 +593,7 @@ export default function EmojiMatchGame() {
                 {[1, 2, 3].map((i) => (
                   <img
                     key={`s-${i}`}
-                    src="/images/design-mode/mouse2(2).png"
+                    src="https://baokker-oss-blog-hangzhou.oss-cn-hangzhou.aliyuncs.com/temp/mouse2.png"
                     alt="dot"
                     className="w-6 h-6 object-contain"
                   />
@@ -602,7 +602,7 @@ export default function EmojiMatchGame() {
                 {[1, 2, 3].map((i) => (
                   <img
                     key={`o-${i}`}
-                    src="/images/design-mode/mouse3(1).png"
+                    src="https://baokker-oss-blog-hangzhou.oss-cn-hangzhou.aliyuncs.com/temp/mouse3.png"
                     alt="dash"
                     className="w-12 h-6 object-contain"
                   />
@@ -611,7 +611,7 @@ export default function EmojiMatchGame() {
                 {[1, 2, 3].map((i) => (
                   <img
                     key={`s2-${i}`}
-                    src="/images/design-mode/mouse2(2).png"
+                    src="https://baokker-oss-blog-hangzhou.oss-cn-hangzhou.aliyuncs.com/temp/mouse2.png"
                     alt="dot"
                     className="w-6 h-6 object-contain"
                   />
