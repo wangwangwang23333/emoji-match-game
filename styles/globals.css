@@ -123,3 +123,56 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Morse diagonal background */
+.morse-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.06; /* subtle */
+}
+.morse-rotated {
+  position: absolute;
+  left: -50%;
+  top: -50%;
+  width: 200%;
+  transform-origin: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: morse-scroll 18s linear infinite;
+}
+.morse-line {
+  white-space: nowrap;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--muted-foreground);
+  opacity: 0.9;
+}
+
+.morse-emoji-wrapper {
+  display: inline-flex;
+  align-items: center;
+}
+.morse-emoji {
+  display: inline-block;
+  transform-origin: center;
+  font-size: 18px;
+}
+.morse-emoji--dash {
+  /* compress dash emoji to appear 'stretched' horizontally by scaling X */
+  transform: scaleX(0.55);
+  display: inline-block;
+}
+
+@keyframes morse-scroll {
+  from {
+    transform: translateY(0) rotate(-45deg);
+  }
+  to {
+    transform: translateY(-40%) rotate(-45deg);
+  }
+}
+

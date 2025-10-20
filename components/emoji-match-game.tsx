@@ -20,7 +20,6 @@ import {
   Trophy,
 } from "lucide-react"
 
-// Allow any emoji string for flexibility — avoids hardcoding a union of many emoji
 type FriendEmoji = string
 
 interface Friend {
@@ -29,6 +28,7 @@ interface Friend {
   nickname: string
   description: string
   letter: string
+  year: number
 }
 
 interface GameCard {
@@ -41,15 +41,15 @@ interface GameCard {
 }
 
 const FRIENDS: Friend[] = [
-  { emoji: "🐱", name: "郭蓥蓥", nickname: "莹莹莹", description: "幽默风趣的损友", letter: "R" },
-  { emoji: "🤣", name: "汪明杰", nickname: "追逐", description: "爱打游戏的挚友", letter: "S" },
-  { emoji: "🏃", name: "梁乔", nickname: "Joe", description: "热爱运动的伙伴", letter: "T" },
-  { emoji: "😅", name: "尚丙奇", nickname: "Bingqi", description: "充满正能量的朋友", letter: "Y" },
-  { emoji: "💿", name: "陈垲昕", nickname: "一壤", description: "活泼开朗的开心果", letter: "R" },
-  { emoji: "😋", name: "香宁雨", nickname: "禾川", description: "才华横溢的学霸", letter: "P" },
-  { emoji: "🏊", name: "程敬", nickname: "Hypocrisy", description: "文艺范的知己", letter: "T" },
-  { emoji: "☁️", name: "赵敏", nickname: "浓云", description: "热心肠的好兄弟", letter: "A" },
-  { emoji: "🤡", name: "方必诚", nickname: "暴克尔", description: "温柔善良的闺蜜", letter: "A" },
+  { emoji: "🐱", name: "郭蓥蓥", nickname: "莹莹莹", description: "幽默风趣的损友", letter: "S", year:2015 },
+  { emoji: "🤣", name: "汪明杰", nickname: "追逐", description: "爱打游戏的挚友", letter: "T", year: 2020 },
+  { emoji: "🏃", name: "梁乔", nickname: "Joe", description: "热爱运动的伙伴", letter: "A", year: 2020 },
+    { emoji: "☁️", name: "赵敏", nickname: "浓云", description: "热心肠的好兄弟", letter: "R", year: 2020 },
+  { emoji: "😅", name: "尚丙奇", nickname: "Bingqi", description: "充满正能量的朋友", letter: "P", year: 2021 },
+  { emoji: "💿", name: "陈垲昕", nickname: "一壤", description: "活泼开朗的开心果", letter: "A", year: 2021 },
+  { emoji: "😋", name: "香宁雨", nickname: "禾川", description: "才华横溢的学霸", letter: "R", year: 2021 },
+  { emoji: "🏊", name: "程敬", nickname: "Hypocrisy", description: "文艺范的知己", letter: "T", year: 2024 },
+  { emoji: "🤡", name: "方必诚", nickname: "暴克尔", description: "温柔善良的闺蜜", letter: "Y", year: 2024 },
 ]
 
 const MORSE_CODE: Record<string, string> = {
@@ -78,6 +78,7 @@ export default function EmojiMatchGame() {
   const [timer, setTimer] = useState(0)
   const [score, setScore] = useState(0)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const [selectedFriend, setSelectedFriend] = useState<Friend | null>(null)
 
   const bgMusicRef = useRef<HTMLAudioElement | null>(null)
   const clickSoundRef = useRef<HTMLAudioElement | null>(null)
@@ -331,28 +332,62 @@ export default function EmojiMatchGame() {
     setPowerUps({ ...powerUps, shuffleCards: powerUps.shuffleCards - 1 })
   }
 
-  const renderMorseCode = (letter: string, emoji: string) => {
+  const renderMorseCodeBackground = (letter: string, emoji: string) => {
     const morse = MORSE_CODE[letter] || ""
+
     return (
-      <div className="flex gap-5 justify-center mt-2">
-        {" "}
-        {/* 间距增大到3px，足够分隔 */}
-        {morse.split("").map((symbol, index) => (
-          <span
-            key={index}
-            className="flex items-center justify-center h-6"
-            style={{
-              width: symbol === "-" ? "14px" : "7px",
-              transform: symbol === "-" ? "scaleX(2)" : "none",
-              transformOrigin: "center center", // 中心拉伸，左右对称扩展
-              padding: "0 1px",
-              boxSizing: "border-box", // 确保padding不影响整体宽度计算
-            }}
-            aria-label={symbol === "." ? "dot" : "dash"}
-          >
-            {emoji}
-          </span>
-        ))}
+      <div className="absolute inset-0 overflow-hidden opacity-20">
+        <div
+          className="absolute inset-0"
+          style={{
+            transform: "rotate(315deg) scale(1.5)",
+            transformOrigin: "center",
+          }}
+        >
+          {Array.from({ length: 30 }).map((_, rowIndex) => (
+            <div key={rowIndex} className="flex gap-10 mb-4">
+              {Array.from({ length: 15 }).map((_, colIndex) => (
+                <div key={colIndex} className="flex gap-2 items-center">
+                  {morse.split("").map((symbol, symbolIndex) => (
+                    <div key={`${rowIndex}-${colIndex}-${symbolIndex}`}>
+                      {symbol === "." ? (
+                        <span
+                          className="inline-block text-center leading-none"
+                          style={{
+                            width: "12px",
+                            height: "12px",
+                            fontSize: "12px",
+                          }}
+                        >
+                          {emoji}
+                        </span>
+                      ) : (
+                        <span
+                          className="inline-block text-center leading-none overflow-visible"
+                          style={{
+                            width: "24px",
+                            height: "12px",
+                            fontSize: "12px",
+                          }}
+                        >
+                          <span
+                            style={{
+                              display: "inline-block",
+                              transform: "scaleX(2)",
+                              transformOrigin: "left center",
+                            }}
+                          >
+                            {emoji}
+                          </span>
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
     )
   }
@@ -361,13 +396,13 @@ export default function EmojiMatchGame() {
 
   const playBackgroundMusic = () => {
     if (!bgMusicPlayed) {
-      // 确保只播放一次
+      // Ensure only played once
       const audio = new Audio()
       audio.loop = true
       audio.volume = 0.3
       audio.src = "https://baokker-oss-blog-hangzhou.oss-cn-hangzhou.aliyuncs.com/temp/music.MP3"
       audio.play().catch((err) => console.log("播放失败:", err))
-      setBgMusicPlayed(true) // 标记为已播放，防止重复点击
+      setBgMusicPlayed(true) // Mark as played to prevent repeat clicks
     }
   }
 
@@ -410,42 +445,46 @@ export default function EmojiMatchGame() {
 
       {showCollection && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-99999 p-4">
-          <Card className="p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-in zoom-in duration-300">
+          <Card className="p-8 max-w-5xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-in zoom-in duration-300">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
-                <BookOpen className="w-6 h-6" />
+              <h2 className="text-3xl font-bold text-primary flex items-center gap-2">
+                <BookOpen className="w-7 h-7" />
                 朋友图鉴
               </h2>
               <Button variant="ghost" size="icon" onClick={() => setShowCollection(false)}>
-                <X className="w-5 h-5" />
+                <X className="w-6 h-6" />
               </Button>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-6">
               {FRIENDS.map((friend) => {
                 const isUnlocked = unlockedFriends.has(friend.name)
 
                 return (
                   <div
                     key={friend.name}
-                    className={`relative p-4 rounded-lg border-2 flex flex-col items-center justify-center transition-all duration-300 ${
+                    onClick={() => isUnlocked && setSelectedFriend(friend)}
+                    className={`relative p-8 rounded-lg border-2 flex flex-col items-center justify-center transition-all duration-300 overflow-hidden min-h-[120px] ${
                       isUnlocked
-                        ? "bg-card border-primary shadow-md"
+                        ? "bg-card border-primary shadow-md cursor-pointer hover:shadow-xl hover:scale-105"
                         : "bg-muted/50 border-muted-foreground/20 backdrop-blur-sm"
                     }`}
                   >
+                    {isUnlocked && renderMorseCodeBackground(friend.letter, friend.emoji)}
+
                     {isUnlocked ? (
                       <>
-                        <div className="text-5xl mb-2">{friend.emoji}</div>
-                        <div className="text-sm font-bold text-center mb-1">{friend.name}</div>
-                        {renderMorseCode(friend.letter, friend.emoji)}
+                        <div className="relative z-10 text-center">
+                          <div className="text-xl font-bold mb-2">{friend.name}</div>
+                          <div className="text-sm text-muted-foreground">认识年份：{friend.year}</div>
+                        </div>
                       </>
                     ) : (
                       <>
-                        <div className="text-5xl opacity-20 blur-sm mb-2">{friend.emoji}</div>
+                        <div className="text-6xl opacity-20 blur-sm mb-2">{friend.emoji}</div>
                         <div className="text-sm text-muted-foreground/50 blur-sm mb-1">{friend.nickname}・未解锁</div>
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="text-4xl text-muted-foreground/50">?</div>
+                          <div className="text-5xl text-muted-foreground/50">?</div>
                         </div>
                       </>
                     )}
@@ -455,7 +494,35 @@ export default function EmojiMatchGame() {
             </div>
 
             <div className="mt-6 p-4 bg-muted/50 rounded-lg">
-              <p className="text-sm text-muted-foreground text-center">集齐全部图鉴，解锁神秘惊喜</p>
+              <p className="text-sm text-muted-foreground text-center">
+                集齐全部图鉴，解锁神秘惊喜 · 点击已解锁的卡片查看详情
+              </p>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {selectedFriend && (
+        <div className="fixed inset-0 bg-background/90 backdrop-blur-md flex items-center justify-center z-[100000] p-4">
+          <Card className="p-12 max-w-3xl w-full shadow-2xl animate-in zoom-in duration-300 relative overflow-hidden min-h-[500px]">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setSelectedFriend(null)}
+              className="absolute top-4 right-4 z-20"
+            >
+              <X className="w-6 h-6" />
+            </Button>
+
+            {renderMorseCodeBackground(selectedFriend.letter, selectedFriend.emoji)}
+
+            <div className="relative z-10 flex flex-col items-center justify-center h-full text-center">
+              <div className="text-8xl mb-6">{selectedFriend.emoji}</div>
+              <h3 className="text-4xl font-bold mb-3">{selectedFriend.name}</h3>
+              <p className="text-xl text-muted-foreground mb-2">{selectedFriend.nickname}</p>
+              <div className="mt-8 px-6 py-3 bg-primary/10 rounded-full">
+                <p className="text-sm font-medium">认识年份: {selectedFriend.year}</p>
+              </div>
             </div>
           </Card>
         </div>
