@@ -7,9 +7,9 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.app',
+  title: '朋友消消乐',
+  description: '点击朋友卡片，凑齐3个相同的即可消除！他们是谁呢？',
+  generator: 'wangwangwang',
 }
 
 export default function RootLayout({
