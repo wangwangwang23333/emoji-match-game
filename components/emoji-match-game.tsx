@@ -392,6 +392,73 @@ export default function EmojiMatchGame() {
     )
   }
 
+  const renderSOSBackground = () => {
+    // SOS pattern: ... --- ...
+    const sosPattern = [".",".", ".", "-", "-", "-", ".", ".", "."]
+
+    return (
+      <div className="absolute inset-0 overflow-hidden opacity-5 pointer-events-none">
+        <div
+          className="absolute"
+          style={{
+            top: "-50%",
+            left: "-50%",
+            width: "200%",
+            height: "200%",
+            transform: "rotate(315deg)",
+            transformOrigin: "center",
+          }}
+        >
+          {Array.from({ length: 20 }).map((_, rowIndex) => (
+            <div key={rowIndex} className="flex gap-15 mb-2">
+              {Array.from({ length: 12 }).map((_, colIndex) => (
+                <div key={colIndex} className="flex gap-15 items-center">
+                  {sosPattern.map((symbol, symbolIndex) => (
+                    <div key={`${rowIndex}-${colIndex}-${symbolIndex}`}>
+                      {symbol === "." ? (
+                        // Dot: normal emoji with 1:1 aspect ratio
+                        <span
+                          className="inline-block text-center leading-none"
+                          style={{
+                            width: "8px",
+                            height: "8px",
+                            fontSize: "8px",
+                          }}
+                        >
+                          ⚫️
+                        </span>
+                      ) : (
+                        // Dash: stretched emoji with 2:1 aspect ratio (double width)
+                        <span
+                          className="inline-block text-center leading-none overflow-visible"
+                          style={{
+                            width: "16px",
+                            height: "8px",
+                            fontSize: "8px",
+                          }}
+                        >
+                          <span
+                            style={{
+                              display: "inline-block",
+                              transform: "scaleX(2)",
+                              transformOrigin: "left center",
+                            }}
+                          >
+                            ➖
+                          </span>
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   const [bgMusicPlayed, setBgMusicPlayed] = useState(false)
 
   const playBackgroundMusic = () => {
@@ -643,6 +710,8 @@ export default function EmojiMatchGame() {
       {showHelpModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50 p-4">
           <Card className="w-full max-w-md p-6 relative">
+            {renderSOSBackground()}
+
             <Button
               onClick={() => setShowHelpModal(false)}
               variant="ghost"
