@@ -62,7 +62,7 @@ const MORSE_CODE: Record<string, string> = {
 }
 
 const MAX_SLOT_SIZE = 7
-const CARDS_PER_FRIEND = 9 // All friends have 6 cards (2 sets of 3), no special cards
+const CARDS_PER_FRIEND = 15 // All friends have 15 cards (3 sets of 5), no special cards
 
 export default function EmojiMatchGame() {
   const [cards, setCards] = useState<GameCard[]>([])
@@ -179,8 +179,8 @@ export default function EmojiMatchGame() {
         if (otherCard.isRemoved || otherCard.id === card.id) return false
         if (otherCard.layer <= card.layer) return false
 
-        const xOverlap = Math.abs(card.position.x - otherCard.position.x) < 60
-        const yOverlap = Math.abs(card.position.y - otherCard.position.y) < 60
+        const xOverlap = Math.abs(card.position.x - otherCard.position.x) < 80
+        const yOverlap = Math.abs(card.position.y - otherCard.position.y) < 80
 
         return xOverlap && yOverlap
       })
@@ -196,7 +196,7 @@ export default function EmojiMatchGame() {
     FRIENDS.forEach((friend) => {
       for (let i = 0; i < CARDS_PER_FRIEND; i++) {
         const layer = Math.floor(Math.random() * 3)
-        const x = Math.random() * 350 + 25
+        const x = Math.random() * 700 + 25
         const y = Math.random() * 350 + 25
 
         newCards.push({
@@ -305,8 +305,26 @@ export default function EmojiMatchGame() {
 
     playSound(clickSoundRef)
 
+    const removedCard = slot[slot.length - 1]
     const newSlot = slot.slice(0, -1)
     setSlot(newSlot)
+
+    const updatedCards = cards.map((card) => {
+      if (card.id === removedCard.id) {
+        return {
+          ...card,
+          isRemoved: false,
+          position: {
+            x: Math.random() * 700 + 25,
+            y: Math.random() * 350 + 25,
+          },
+          layer: Math.floor(Math.random() * 3),
+        }
+      }
+      return card
+    })
+
+    setCards(updateBlockedStatus(updatedCards))
     setPowerUps({ ...powerUps, removeOne: powerUps.removeOne - 1 })
   }
 
@@ -321,7 +339,7 @@ export default function EmojiMatchGame() {
       return {
         ...card,
         position: {
-          x: Math.random() * 350 + 25,
+          x: Math.random() * 700 + 25,
           y: Math.random() * 350 + 25,
         },
         layer: Math.floor(Math.random() * 3),
